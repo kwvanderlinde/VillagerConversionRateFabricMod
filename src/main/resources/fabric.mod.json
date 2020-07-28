@@ -20,10 +20,14 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "com.kwvanderlinde.mc.villagerconversionrate.VillagerConversionRate"
+      "com.kwvanderlinde.mc.villagerconversionrate.VillagerConversionRateModInitializer"
+    ],
+    "modmenu": [
+      "com.kwvanderlinde.mc.villagerconversionrate.Menu"
     ]
   },
   "mixins": [
+    "villager_conversion_rate.mixins.json"
   ],
 
   "depends": {

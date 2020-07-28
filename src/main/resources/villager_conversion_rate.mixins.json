@@ -1,0 +1,16 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.kwvanderlinde.mc.villagerconversionrate.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+    "ConfigurableVillagerConversionMixin"
+  ],
+  "client": [
+  ],
+  "server": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
