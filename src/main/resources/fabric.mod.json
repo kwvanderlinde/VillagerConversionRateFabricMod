@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "id": "villager_conversion_rate",
+  "version": "${version}",
+
+  "name": "Villager Conversion Rate",
+  "description": "A fabric mod that controls the chance of a villager being converted to a zombie villager.",
+  "authors": [
+    "Kenneth Vanderlinde <kwvanderlinde@gmail.com>"
+  ],
+  "contact": {
+    "homepage": "https://github.com/kwvanderlinde/VillagerConversionRateFabricMod",
+    "sources": "https://github.com/kwvanderlinde/VillagerConversionRateFabricMod",
+    "issues": "https://github.com/kwvanderlinde/VillagerConversionRateFabricMod/issues"
+  },
+
+  "license": "BSD-3-Clause",
+  "icon": "assets/icon.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "com.kwvanderlinde.mc.villagerconversionrate.VillagerConversionRate"
+    ]
+  },
+  "mixins": [
+  ],
+
+  "depends": {
+    "fabricloader": ">=0.7.4",
+    "fabric": "*",
+    "minecraft": "1.16.x"
+  },
+  "suggests": {
+    "flamingo": "*"
+  }
+}
