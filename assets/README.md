@@ -1,0 +1,2 @@
+This directory is for storing asset files that should not necessarily be packaged into the final JAR. E.g., gimp `.xcf`
+files or other similar work that is useful to keep around but is not a final product.
