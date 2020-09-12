@@ -33,7 +33,7 @@ public class ConfigurationLocatorTest {
 		catch (IOException e) {
 			throw new RuntimeException(e);
 		}
-		when(this.loader.getConfigDirectory()).thenReturn(this.temporaryDirectory.toFile());
+		when(this.loader.getConfigDir()).thenReturn(this.temporaryDirectory);
 
 		this.sut = new ConfigurationLocator(this.loader, this.modName);
 	}
