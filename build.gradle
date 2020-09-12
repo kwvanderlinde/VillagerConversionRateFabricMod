@@ -19,10 +19,15 @@ dependencies {
 
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-	modImplementation "io.github.prospector:modmenu:1.14.1+build.26"
-
-	modApi "me.shedaniel.cloth:config-2:4.6.0"
-	include "me.shedaniel.cloth:config-2:4.6.0"  // `include` vs `modApi` so cloth config is embedded in this mod.
+	modImplementation "io.github.prospector:modmenu:1.14.6+build.31"
+	modImplementation("me.shedaniel.cloth:config-2:4.8.1") {
+		/*
+		 * Cloth config formally depends on an old version of fabric API that still includes fabric-biomes-v1. However,
+		 * by the time of the full 1.16.2 fabric release, this has been removed and now causes mixin failures. This is
+		 * why we've taken the heavy handed approach of excluding the dependency.
+		 */
+		exclude group: 'net.fabricmc.fabric-api', module: 'fabric-api'
+	}
 
 	// PSA: Some older mods, compiled on Loom 0.2.1, might have outdated Maven POMs.
 	// You may need to force-disable transitiveness on them.
