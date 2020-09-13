@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "id": "villager-conversion-rate-common",
+  "version": "${version}",
+  "name": "Villager Conversion Rate Common Libraries",
+  "description": "",
+  "authors": [],
+  "contact": {},
+  "license": "BSD 3-Clause",
+  "icon": "assets/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+    ]
+  },
+  "mixins": [
+  ],
+  "depends": {
+    "fabricloader": ">=0.9.3+build.207",
+    "fabric": "*",
+    "minecraft": "*"
+  }
+}
