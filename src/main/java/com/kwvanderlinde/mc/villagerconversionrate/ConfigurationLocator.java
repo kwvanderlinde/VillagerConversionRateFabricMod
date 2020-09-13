@@ -23,7 +23,7 @@ public class ConfigurationLocator {
 	}
 
 	private Path getConfigFilePath() {
-		return this.loader.getConfigDirectory().toPath().resolve(this.modName + ".json");
+		return this.loader.getConfigDir().resolve(this.modName + ".json");
 	}
 
 	public Reader getReader() throws FileNotFoundException {
