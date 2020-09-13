@@ -8,8 +8,3 @@ pluginManagement {
         gradlePluginPortal()
     }
 }
-
-
-rootProject.name = 'villager-conversion-rate'
-include ':common', ':1.16.1', ':1.16.2'
-
