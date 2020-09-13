@@ -1,0 +1,28 @@
+plugins {
+	id 'maven-publish'
+	id "io.freefair.lombok" version "5.1.0"
+	id 'java'
+}
+
+allprojects {
+	repositories {
+		jcenter()
+	}
+}
+
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
+
+archivesBaseName = project.archives_base_name
+version = project.mod_version
+group = project.maven_group
+
+dependencies {
+}
+
+test {
+	useJUnitPlatform()
+	testLogging {
+		events "passed", "skipped", "failed"
+	}
+}
