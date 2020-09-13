@@ -27,7 +27,7 @@ dependencies {
     // You may need to force-disable transitiveness on them.
 
     implementation project(':common')
-    include project(':common')  // Ay or nay?
+    include project(':common')
 }
 
 processResources {
