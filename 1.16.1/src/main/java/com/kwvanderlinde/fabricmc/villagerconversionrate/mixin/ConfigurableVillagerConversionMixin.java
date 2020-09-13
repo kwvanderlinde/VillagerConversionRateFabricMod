@@ -1,6 +1,6 @@
 package com.kwvanderlinde.fabricmc.villagerconversionrate.mixin;
 
-import com.kwvanderlinde.fabricmc.villagerconversionrate.VillagerConversionRateModInitializer;
+import com.kwvanderlinde.fabricmc.villagerconversionrate.common.VillagerConversionRate;
 import com.kwvanderlinde.fabricmc.villagerconversionrate.config.Configuration;
 import net.minecraft.datafixer.NbtOps;
 import net.minecraft.entity.EntityType;
@@ -31,7 +31,7 @@ public class ConfigurableVillagerConversionMixin extends HostileEntity {
 			return;
 		}
 
-		Configuration configuration = VillagerConversionRateModInitializer.getInstance().getConfigurationSource().get();
+		Configuration configuration = VillagerConversionRate.getInstance().getConfigurationSource().get();
 		if (!configuration.enabled.get()) {
 			// Customized conversion rate disabled. Default to vanilla behaviour.
 			return;

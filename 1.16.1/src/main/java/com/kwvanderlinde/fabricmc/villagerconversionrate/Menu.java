@@ -1,5 +1,6 @@
 package com.kwvanderlinde.fabricmc.villagerconversionrate;
 
+import com.kwvanderlinde.fabricmc.villagerconversionrate.common.VillagerConversionRate;
 import com.kwvanderlinde.fabricmc.villagerconversionrate.config.Configuration;
 import com.kwvanderlinde.fabricmc.villagerconversionrate.config.ConfigurationSource;
 import io.github.prospector.modmenu.api.ConfigScreenFactory;
@@ -14,7 +15,7 @@ public class Menu implements ModMenuApi {
 	public ConfigScreenFactory<?> getModConfigScreenFactory() {
 
 		return screen -> {
-			VillagerConversionRateModInitializer initializer = VillagerConversionRateModInitializer.getInstance();
+			VillagerConversionRate initializer = VillagerConversionRate.getInstance();
 			ConfigurationSource configurationSource = initializer.getConfigurationSource();
 			Configuration configuration = configurationSource.get();
 
