@@ -1,7 +1,6 @@
 package com.kwvanderlinde.fabricmc.villagerconversionrate.mixin;
 
 import com.kwvanderlinde.fabricmc.villagerconversionrate.common.VillagerConversionRate;
-import com.kwvanderlinde.fabricmc.villagerconversionrate.config.Configuration;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SpawnReason;
@@ -35,37 +34,37 @@ public class ConfigurableVillagerConversionMixin extends HostileEntity {
 			return;
 		}
 
-		Configuration configuration = VillagerConversionRate.getInstance().getConfigurationSource().get();
-		if (!configuration.enabled.get()) {
-			// Customized conversion rate disabled. Default to vanilla behaviour.
-			return;
-		}
+		switch (VillagerConversionRate.getInstance().getConversionPredicate().test()) {
+			case USE_VANILLA_BEHAVIOUR:
+				// Customized conversion rate disabled. Default to vanilla behaviour.
+				return;
 
-		// Customized conversion rate is enabled. Suppress vanilla behaviour.
-		callbackInfo.cancel();
+			case KILL:
+				// Customized conversion rate is enabled, but conversion failed. Suppress vanilla behaviour and do not apply conversion logic.
+				callbackInfo.cancel();
+				return;
 
-		double conversionRate = configuration.conversionRate.get();
-		if ((conversionRate == 0.0)                              // 0.0 means it is impossible for conversion to occur.
-				|| this.random.nextDouble() > conversionRate) {  // N.B.: `this.random.nextDouble() <= 1.0` is always `true`.
-			// Possible conversion failed. Do nothing and let the villager die.
-			return;
-		}
+			case CONVERT:
+				// Customized conversion rate is enabled and conversion succeeded. Suppress vanilla behaviour and apply conversion logic.
+				callbackInfo.cancel();
 
-		// Possible conversion succeeded. Perform the conversion by making a new zombie villager with the villager's data.
-		// region TODO Find a way of doing this without copying the code from net.minecraft.entity.mob.ZombieEntity#onKilledOther()
-		VillagerEntity villagerEntity = (VillagerEntity)other;
-		// method_29243 handles converting one entity to another, including copying common attributes like "is baby?" and "ai disabled".
-		ZombieVillagerEntity zombieVillagerEntity = (ZombieVillagerEntity)villagerEntity.method_29243(EntityType.ZOMBIE_VILLAGER, false);
-		assert zombieVillagerEntity != null;
-		zombieVillagerEntity.initialize(serverWorld, serverWorld.getLocalDifficulty(zombieVillagerEntity.getBlockPos()), SpawnReason.CONVERSION, new ZombieEntity.ZombieData(false, true), (CompoundTag)null);
-		// method_29243 is not complete, so we do need to copy villager-specific data.
-		zombieVillagerEntity.setVillagerData(villagerEntity.getVillagerData());
-		zombieVillagerEntity.setGossipData((Tag)villagerEntity.getGossip().serialize(NbtOps.INSTANCE).getValue());
-		zombieVillagerEntity.setOfferData(villagerEntity.getOffers().toTag());
-		zombieVillagerEntity.setXp(villagerEntity.getExperience());
-		if (!this.isSilent()) {
-			serverWorld.syncWorldEvent((PlayerEntity)null, 1026, this.getBlockPos(), 0);
+				// Perform the conversion by making a new zombie villager with the villager's data.
+				// region TODO Find a way of doing this without copying the code from net.minecraft.entity.mob.ZombieEntity#onKilledOther()
+				VillagerEntity villagerEntity = (VillagerEntity)other;
+				// method_29243 handles converting one entity to another, including copying common attributes like "is baby?" and "ai disabled".
+				ZombieVillagerEntity zombieVillagerEntity = (ZombieVillagerEntity)villagerEntity.method_29243(EntityType.ZOMBIE_VILLAGER, false);
+				assert zombieVillagerEntity != null;
+				zombieVillagerEntity.initialize(serverWorld, serverWorld.getLocalDifficulty(zombieVillagerEntity.getBlockPos()), SpawnReason.CONVERSION, new ZombieEntity.ZombieData(false, true), (CompoundTag)null);
+				// method_29243 is not complete, so we do need to copy villager-specific data.
+				zombieVillagerEntity.setVillagerData(villagerEntity.getVillagerData());
+				zombieVillagerEntity.setGossipData((Tag)villagerEntity.getGossip().serialize(NbtOps.INSTANCE).getValue());
+				zombieVillagerEntity.setOfferData(villagerEntity.getOffers().toTag());
+				zombieVillagerEntity.setXp(villagerEntity.getExperience());
+				if (!this.isSilent()) {
+					serverWorld.syncWorldEvent((PlayerEntity)null, 1026, this.getBlockPos(), 0);
+				}
+				// endregion
+				break;
 		}
-		// endregion
 	}
 }
