@@ -1,0 +1,9 @@
+{
+  "title.villager_conversion_rate.config": "Villager Conversion Rate Configuration",
+
+  "category.villager_conversion_rate.general": "General",
+
+  "option.villager_conversion_rate.enabled": "Enable Mod?",
+  "option.villager_conversion_rate.conversionRate": "Conversion Rate (%)",
+  "option.villager_conversion_rate.conversionRateTooltip": "0% means never convert, 100% means always convert"
+}
