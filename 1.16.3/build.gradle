@@ -6,7 +6,7 @@ plugins {
 sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
 
-archivesBaseName = project.archives_base_name
+archivesBaseName = "${project.archives_base_name}-${project.minecraft_version}"
 version = project.mod_version
 group = project.maven_group
 
@@ -74,7 +74,7 @@ jar {
 // configure the maven publication
 publishing {
     publications {
-        mavenJava(org.gradle.api.publish.maven.MavenPublication) {
+        mavenJava(MavenPublication) {
             // add all the jars that should be included when publishing to maven
             artifact(remapJar) {
                 builtBy remapJar
