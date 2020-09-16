@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "id": "villager-conversion-rate-1_16_1",
+  "id": "${mod_id}-${minecraft_version_underscores}",
   "version": "${version}",
 
   "name": "Villager Conversion Rate",
@@ -21,12 +21,12 @@
     ]
   },
   "mixins": [
-    "1.16.1.mixins.json"
+    "villager-conversion-rate.mixins.json"
   ],
 
   "depends": {
     "fabricloader": ">=0.9.3+build.207",
     "fabric": "*",
-    "minecraft": "1.16.1"
+    "minecraft": "${minecraft_version}"
   }
 }

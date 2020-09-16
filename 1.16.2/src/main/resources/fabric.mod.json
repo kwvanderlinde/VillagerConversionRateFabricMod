@@ -1,13 +1,16 @@
 {
   "schemaVersion": 1,
-  "id": "villager-conversion-rate-1_16_2",
+  "id": "${mod_id}-${minecraft_version_underscores}",
   "version": "${version}",
+
   "name": "Villager Conversion Rate",
   "description": "",
   "authors": [],
   "contact": {},
+
   "license": "BSD 3-Clause",
   "icon": "assets/icon.png",
+
   "environment": "*",
   "entrypoints": {
     "main": [
@@ -18,11 +21,12 @@
     ]
   },
   "mixins": [
-    "1.16.2.mixins.json"
+    "villager-conversion-rate.mixins.json"
   ],
+
   "depends": {
     "fabricloader": ">=0.9.3+build.207",
     "fabric": "*",
-    "minecraft": "1.16.2"
+    "minecraft": "${minecraft_version}"
   }
 }

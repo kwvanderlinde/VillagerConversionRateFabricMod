@@ -6,6 +6,7 @@ plugins {
 sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
 
+// TODO Rename the `archives_base_name property to `mod_id` or something os it makes more sense to use in `fabric.mod.json` as well.
 archivesBaseName = "${project.archives_base_name}-${project.minecraft_version}"
 version = project.mod_version
 group = project.maven_group
@@ -43,7 +44,7 @@ processResources {
 
     from(sourceSets.main.resources.srcDirs) {
         include "fabric.mod.json"
-        expand "version": project.version
+        expand "mod_id": project.archives_base_name,  "version": project.version, "minecraft_version_underscores": project.minecraft_version.replaceAll('\\.', '_'), "minecraft_version": project.minecraft_version
     }
 
     from(sourceSets.main.resources.srcDirs) {
