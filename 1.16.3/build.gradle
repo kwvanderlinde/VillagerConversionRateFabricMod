@@ -68,6 +68,9 @@ task sourcesJar(type: Jar, dependsOn: classes) {
 
 jar {
     from "$rootDir/LICENSE"
+    from ("$rootDir/assets")  {
+        into "assets"
+    }
 }
 
 // configure the maven publication
