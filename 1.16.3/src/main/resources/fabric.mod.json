@@ -3,10 +3,21 @@
   "id": "${mod_id}-${minecraft_version_underscores}",
   "version": "${version}",
 
-  "name": "Villager Conversion Rate",
-  "description": "",
-  "authors": [],
-  "contact": {},
+  "name": "${mod_name}",
+  "description": "${mod_description}",
+  "authors": [
+    {
+      "name": "Kenneth VanderLinde",
+      "contact": {
+        "email": "kwvanderlinde@gmail.com"
+      }
+    }
+  ],
+  "contact": {
+    "homepage": "https://github.com/kwvanderlinde/VillagerConversionRateFabricMod",
+    "sources": "https://github.com/kwvanderlinde/VillagerConversionRateFabricMod",
+    "issues": "https://github.com/kwvanderlinde/VillagerConversionRateFabricMod/issues"
+  },
 
   "license": "BSD 3-Clause",
   "icon": "assets/icon.png",
