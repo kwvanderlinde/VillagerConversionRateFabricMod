@@ -6,7 +6,7 @@ sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
 
 group 'com.kwvanderlinde.fabricmc.villagerconversionrate'
-version 'development'
+version project.mod_version
 
 repositories {
     mavenCentral()
