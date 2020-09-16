@@ -6,7 +6,8 @@ plugins {
 sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
 
-archivesBaseName = project.archives_base_name
+// TODO Rename the `archives_base_name property to `mod_id` or something os it makes more sense to use in `fabric.mod.json` as well.
+archivesBaseName = "${project.archives_base_name}-${project.minecraft_version}"
 version = project.mod_version
 group = project.maven_group
 
@@ -18,10 +19,18 @@ dependencies {
 
     // Fabric API. This is technically optional, but you probably want it anyway.
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-    modImplementation "io.github.prospector:modmenu:1.14.1+build.26"
+    modImplementation "io.github.prospector:modmenu:${project.modmenu_version}"
 
-    modApi "me.shedaniel.cloth:config-2:4.6.0"
-    include "me.shedaniel.cloth:config-2:4.6.0"  // `include` vs `modApi` so cloth config is embedded in this mod.
+    // Make sure our library dependencies are contained in our JAR.
+    include "me.shedaniel.cloth:config-2:${project.cloth_config_2_version}"
+    modApi("me.shedaniel.cloth:config-2:${project.cloth_config_2_version}") {
+        /*
+         * Cloth config formally depends on an old version of fabric API that still includes fabric-biomes-v1. However,
+         * by the time of the full 1.16.2 fabric release, this has been removed and now causes mixin failures. This is
+         * why we've taken the heavy handed approach of excluding the dependency.
+         */
+        exclude group: 'net.fabricmc.fabric-api', module: 'fabric-api'
+    }
 
     // PSA: Some older mods, compiled on Loom 0.2.1, might have outdated Maven POMs.
     // You may need to force-disable transitiveness on them.
@@ -35,7 +44,7 @@ processResources {
 
     from(sourceSets.main.resources.srcDirs) {
         include "fabric.mod.json"
-        expand "version": project.version
+        expand "mod_id": project.archives_base_name,  "version": project.version, "minecraft_version_underscores": project.minecraft_version.replaceAll('\\.', '_'), "minecraft_version": project.minecraft_version
     }
 
     from(sourceSets.main.resources.srcDirs) {
@@ -59,7 +68,10 @@ task sourcesJar(type: Jar, dependsOn: classes) {
 }
 
 jar {
-    from "LICENSE"
+    from "$rootDir/LICENSE"
+    from ("$rootDir/assets")  {
+        into "assets"
+    }
 }
 
 // configure the maven publication
