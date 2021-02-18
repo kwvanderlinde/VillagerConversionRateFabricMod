@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "id": "${mod_id}-${minecraft_version_underscores}",
+  "version": "${version}",
+
+  "name": "${mod_name}",
+  "description": "${mod_description}",
+  "authors": [
+    {
+      "name": "Kenneth VanderLinde",
+      "contact": {
+        "email": "kwvanderlinde@gmail.com"
+      }
+    }
+  ],
+  "contact": {
+    "homepage": "https://github.com/kwvanderlinde/VillagerConversionRateFabricMod",
+    "sources": "https://github.com/kwvanderlinde/VillagerConversionRateFabricMod",
+    "issues": "https://github.com/kwvanderlinde/VillagerConversionRateFabricMod/issues"
+  },
+
+  "license": "BSD 3-Clause",
+  "icon": "assets/icon.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "com.kwvanderlinde.fabricmc.villagerconversionrate.VillagerConversionRateModInitializer"
+    ],
+    "modmenu": [
+      "com.kwvanderlinde.fabricmc.villagerconversionrate.Menu"
+    ]
+  },
+  "mixins": [
+    "villager-conversion-rate.mixins.json"
+  ],
+
+  "depends": {
+    "fabricloader": ">=0.9.3+build.207",
+    "fabric": "*",
+    "minecraft": "${minecraft_version}"
+  }
+}
