@@ -1,5 +1,6 @@
 package com.kwvanderlinde.fabricmc.villagerconversionrate.config;
 
+import com.google.common.io.Files;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -7,16 +8,18 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
 
 public class ConfigurationSource {
 	private static final Logger LOGGER = LogManager.getFormatterLogger(ConfigurationSource.class.getCanonicalName());
 
-	private final ConfigurationLocator locator;
+	private final Path configPath;
 	private final ConfigurationParser parser;
 	private Configuration configuration;
 
-	public ConfigurationSource(ConfigurationLocator locator, ConfigurationParser parser) {
-		this.locator = locator;
+	public ConfigurationSource(Path configPath, ConfigurationParser parser) {
+		this.configPath = configPath;
 		this.parser = parser;
 		this.configuration = null;
 	}
@@ -24,7 +27,7 @@ public class ConfigurationSource {
 	public void load() {
 		var result = new Configuration();
 
-		try (Reader reader = locator.getReader()) {
+		try (Reader reader = Files.newReader(configPath.toFile(), StandardCharsets.UTF_8)) {
 			result = this.parser.parse(reader);
 			LOGGER.info("Configuration loaded");
 		}
@@ -57,7 +60,7 @@ public class ConfigurationSource {
 	}
 
 	public void save() {
-		try (Writer writer = locator.getWriter()) {
+		try (Writer writer = Files.newWriter(configPath.toFile(), StandardCharsets.UTF_8)) {
 			this.parser.unparse(writer, this.configuration);
 		}
 		catch (FileNotFoundException e) {
