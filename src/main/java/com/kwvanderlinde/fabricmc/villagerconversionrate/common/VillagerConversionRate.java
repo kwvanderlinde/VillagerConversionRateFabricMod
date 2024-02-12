@@ -60,9 +60,6 @@ public class VillagerConversionRate {
 
 		LOGGER.info(String.format("Finished initializing %s mod", MOD_NAME));
 
-		instance = this;
-
-
 		CommandRegistrationCallback.EVENT.register(this::registerCommands);
 	}
 
