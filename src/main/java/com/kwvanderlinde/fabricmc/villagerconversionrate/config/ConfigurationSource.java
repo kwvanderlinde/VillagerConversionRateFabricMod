@@ -21,27 +21,35 @@ public class ConfigurationSource {
 		this.configuration = null;
 	}
 
+	public void load() {
+		var result = new Configuration();
+
+		try (Reader reader = locator.getReader()) {
+			result = this.parser.parse(reader);
+			LOGGER.info("Configuration loaded");
+		}
+		catch (ParseFailedException e) {
+			LOGGER.info("Configuration file was corrupt so we are recreating it with default values.");
+			result = new Configuration();
+			this.save();
+		}
+		catch (FileNotFoundException e) {
+			LOGGER.info("Configuration file was not found so we are creating it now with default values.");
+			result = new Configuration();
+			this.save();
+		}
+		catch (IOException e) {
+			LOGGER.error("Unexpected I/O error while reading configuration file. Falling back to defaults.", e);
+			// configuration is guaranteed to be set here. TODO Make this obvious in the code flow.
+		}
+
+		this.configuration = result;
+	}
+
 	public Configuration get() {
 		if (this.configuration == null) {
 			// Not yet loaded.
-			try (Reader reader = locator.getReader()) {
-				this.configuration = this.parser.parse(reader);
-				LOGGER.info("Configuration loaded");
-			}
-			catch (ParseFailedException e) {
-				LOGGER.info("Configuration file was corrupt so we are recreating it with default values.");
-				this.configuration = new Configuration();
-				this.save();
-			}
-			catch (FileNotFoundException e) {
-				LOGGER.info("Configuration file was not found so we are creating it now with default values.");
-				this.configuration = new Configuration();
-				this.save();
-			}
-			catch (IOException e) {
-				LOGGER.error("Unexpected I/O error while reading configuration file. Falling back to defaults.", e);
-				// configuration is guaranteed to be set here. TODO Make this obvious in the code flow.
-			}
+			load();
 		}
 		assert this.configuration != null;
 
