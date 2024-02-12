@@ -32,22 +32,18 @@ public class VillagerConversionRate {
 				new ConfigurationParser()
 		);
 		instance = new VillagerConversionRate(configurationSource,
-		                                      new VillagerConversionPredicate(new Random(), configurationSource),
-		                                      new MenuFactory(configurationSource));
+		                                      new VillagerConversionPredicate(new Random(), configurationSource));
 
 		return instance;
 	}
 
 	private final ConfigurationSource configurationSource;
 	private final VillagerConversionPredicate villagerConversionPredicate;
-	private final MenuFactory menuFactory;
 
 	private VillagerConversionRate(ConfigurationSource configurationSource,
-	                               VillagerConversionPredicate villagerConversionPredicate,
-	                               MenuFactory menuFactory) {
+	                               VillagerConversionPredicate villagerConversionPredicate) {
 		this.configurationSource = configurationSource;
 		this.villagerConversionPredicate = villagerConversionPredicate;
-		this.menuFactory = menuFactory;
 
 		LOGGER.info(String.format("Initializing %s mod", MOD_NAME));
 
@@ -70,9 +66,5 @@ public class VillagerConversionRate {
 
 	public VillagerConversionPredicate getConversionPredicate() {
 		return this.villagerConversionPredicate;
-	}
-
-	public MenuFactory getMenuFactory() {
-		return this.menuFactory;
 	}
 }

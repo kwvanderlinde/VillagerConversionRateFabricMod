@@ -26,9 +26,6 @@
   "entrypoints": {
     "main": [
       "com.kwvanderlinde.fabricmc.villagerconversionrate.VillagerConversionRateModInitializer"
-    ],
-    "modmenu": [
-      "com.kwvanderlinde.fabricmc.villagerconversionrate.Menu"
     ]
   },
   "mixins": [
