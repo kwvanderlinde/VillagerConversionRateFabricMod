@@ -10,6 +10,7 @@ import java.io.Reader;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
+import java.util.function.Function;
 
 public class ConfigurationSource {
 	private static final Logger LOGGER = LogManager.getFormatterLogger(ConfigurationSource.class.getCanonicalName());
@@ -59,7 +60,17 @@ public class ConfigurationSource {
 		return this.configuration;
 	}
 
-	public void save() {
+	public void updateConfiguration(Function<Configuration, Configuration> updater) {
+		this.configuration = updater.apply(this.configuration);
+		this.save();
+	}
+
+	public void set(Configuration newConfiguration) {
+		this.configuration = newConfiguration.validated();
+		this.save();
+	}
+
+	private void save() {
 		try (Writer writer = Files.newWriter(configPath.toFile(), StandardCharsets.UTF_8)) {
 			this.parser.unparse(writer, this.configuration);
 		}

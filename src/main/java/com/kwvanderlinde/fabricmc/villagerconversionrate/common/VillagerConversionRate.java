@@ -3,10 +3,13 @@ package com.kwvanderlinde.fabricmc.villagerconversionrate.common;
 import com.kwvanderlinde.fabricmc.villagerconversionrate.config.ConfigurationParser;
 import com.kwvanderlinde.fabricmc.villagerconversionrate.config.ConfigurationSource;
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.arguments.BoolArgumentType;
+import com.mojang.brigadier.arguments.DoubleArgumentType;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
+import net.minecraft.network.chat.Component;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -73,17 +76,69 @@ public class VillagerConversionRate {
 		final var commands = Commands.literal("vcr");
 
 		commands
+				.executes(context -> {
+					final var enabled = configurationSource.get().enabled();
+					final var rate = configurationSource.get().conversionRate();
+					context.getSource().sendSuccess(
+							() -> Component.literal("Villager conversion rate [enabled: ").append(Boolean.toString(enabled)).append("; rate: ").append(Double.toString(rate)).append("]"),
+							false
+					);
+					return 0;
+				})
 				.then(Commands.literal("reload")
 				              .requires(s -> s.hasPermission(4))
 				              .executes(context -> {
-								  reload();
+								  this.configurationSource.load();
+
+								  // TODO Handle failure here.
+					              context.getSource().sendSuccess(
+							              () -> Component.literal("Configuration reloaded"),
+							              false
+					              );
+
 								  return 0;
-							  }));
+							  }))
+				.then(Commands.literal("rate")
+						      .executes(context -> {
+								  final var rate = configurationSource.get().conversionRate();
+								  context.getSource().sendSuccess(
+										  () -> Component.literal("Villager conversion rate is set to ").append(Double.toString(rate)),
+										  false
+								  );
+								  return 0;
+						      })
+						      .then(Commands.argument("rate", DoubleArgumentType.doubleArg(0.0, 1.0))
+						                    .requires(s -> s.hasPermission(4))
+								            .executes(context -> {
+												final var rate = DoubleArgumentType.getDouble(context, "rate");
+									            configurationSource.updateConfiguration(configuration -> configuration.withConversionRate(rate));
+									            context.getSource().sendSuccess(
+											            () -> Component.literal("Villager conversion rate now set to ").append(Double.toString(rate)),
+											            false
+									            );
+												return 0;
+								            })))
+				.then(Commands.literal("enabled")
+						      .executes(context -> {
+							      final var enabled = configurationSource.get().enabled();
+							      context.getSource().sendSuccess(
+									      () -> Component.literal("Villager conversion rate is").append(enabled ? " " : " not ").append("enabled"),
+									      false
+							      );
+							      return 0;
+						      })
+				              .then(Commands.argument("enabled", BoolArgumentType.bool())
+				                            .requires(s -> s.hasPermission(4))
+				                            .executes(context -> {
+												final var enabled = BoolArgumentType.getBool(context, "enabled");
+					                            configurationSource.updateConfiguration(configuration -> configuration.withEnabled(enabled));
+					                            context.getSource().sendSuccess(
+							                            () -> Component.literal("Villager conversion rate is now ").append(enabled ? "enabled" : "disabled"),
+							                            false
+					                            );
+					                            return 0;
+				                            })));
 
 		dispatcher.register(commands);
-	}
-
-	private void reload() {
-		this.configurationSource.load();
 	}
 }

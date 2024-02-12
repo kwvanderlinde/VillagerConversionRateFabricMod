@@ -11,4 +11,12 @@ public record Configuration(boolean enabled, double conversionRate) {
                 Math.max(0.0, Math.min(conversionRate, 1.0))
         );
     }
+
+    public Configuration withEnabled(boolean enabled) {
+        return new Configuration(enabled, this.conversionRate).validated();
+    }
+
+    public Configuration withConversionRate(double rate) {
+        return new Configuration(this.enabled, rate).validated();
+    }
 }
