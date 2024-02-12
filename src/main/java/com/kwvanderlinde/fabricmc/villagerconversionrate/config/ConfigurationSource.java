@@ -72,11 +72,6 @@ public class ConfigurationSource {
 		this.save();
 	}
 
-	public void set(Configuration newConfiguration) {
-		this.configuration = newConfiguration.validated();
-		this.save();
-	}
-
 	private void save() {
 		try (Writer writer = Files.newWriter(configPath.toFile(), StandardCharsets.UTF_8)) {
 			this.gson.toJson(configuration, writer);
