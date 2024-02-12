@@ -1,6 +1,10 @@
 package com.kwvanderlinde.fabricmc.villagerconversionrate.config;
 
 import com.google.common.io.Files;
+import com.google.gson.FieldNamingPolicy;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonParseException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -16,12 +20,15 @@ public class ConfigurationSource {
 	private static final Logger LOGGER = LogManager.getFormatterLogger(ConfigurationSource.class.getCanonicalName());
 
 	private final Path configPath;
-	private final ConfigurationParser parser;
+	private final Gson gson;
 	private Configuration configuration;
 
-	public ConfigurationSource(Path configPath, ConfigurationParser parser) {
+	public ConfigurationSource(Path configPath) {
 		this.configPath = configPath;
-		this.parser = parser;
+		this.gson = new GsonBuilder()
+				.setPrettyPrinting()
+				.setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_DASHES)
+				.create();
 		this.configuration = null;
 	}
 
@@ -29,10 +36,10 @@ public class ConfigurationSource {
 		var result = new Configuration();
 
 		try (Reader reader = Files.newReader(configPath.toFile(), StandardCharsets.UTF_8)) {
-			result = this.parser.parse(reader).validated();
+			result = gson.fromJson(reader, Configuration.class).validated();
 			LOGGER.info("Configuration loaded");
 		}
-		catch (ParseFailedException e) {
+		catch (JsonParseException e) {
 			LOGGER.info("Configuration file was corrupt so we are recreating it with default values.");
 			result = new Configuration();
 			this.save();
@@ -72,7 +79,7 @@ public class ConfigurationSource {
 
 	private void save() {
 		try (Writer writer = Files.newWriter(configPath.toFile(), StandardCharsets.UTF_8)) {
-			this.parser.unparse(writer, this.configuration);
+			this.gson.toJson(configuration, writer);
 		}
 		catch (FileNotFoundException e) {
 			LOGGER.error("Unable to find the configuration file to write to.");

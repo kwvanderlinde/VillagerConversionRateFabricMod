@@ -1,6 +1,5 @@
 package com.kwvanderlinde.fabricmc.villagerconversionrate.common;
 
-import com.kwvanderlinde.fabricmc.villagerconversionrate.config.ConfigurationParser;
 import com.kwvanderlinde.fabricmc.villagerconversionrate.config.ConfigurationSource;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.BoolArgumentType;
@@ -34,8 +33,7 @@ public class VillagerConversionRate {
 		}
 
 		ConfigurationSource configurationSource = new ConfigurationSource(
-				configurationDirectory.resolve(MOD_NAME + ".json"),
-				new ConfigurationParser()
+				configurationDirectory.resolve(MOD_NAME + ".json")
 		);
 		instance = new VillagerConversionRate(configurationSource,
 		                                      new VillagerConversionPredicate(new Random(), configurationSource));
