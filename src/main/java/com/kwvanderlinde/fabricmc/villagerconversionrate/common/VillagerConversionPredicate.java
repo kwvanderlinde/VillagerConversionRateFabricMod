@@ -30,12 +30,12 @@ public class VillagerConversionPredicate {
 	 */
 	public ConversionResult test() {
 		Configuration configuration = configurationSource.get();
-		if (!configuration.enabled.get()) {
+		if (!configuration.enabled()) {
 			// Customized conversion rate disabled. Default to vanilla behaviour.
 			return ConversionResult.USE_VANILLA_BEHAVIOUR;
 		}
 
-		double conversionRate = configuration.conversionRate.get();
+		double conversionRate = configuration.conversionRate();
 		if ((conversionRate == 0.0)                              // 0.0 means it is impossible for conversion to occur.
 				|| this.random.nextDouble() > conversionRate) {  // N.B.: `this.random.nextDouble() <= 1.0` is always `true`.
 			// Possible conversion failed. Do nothing and let the villager die.
