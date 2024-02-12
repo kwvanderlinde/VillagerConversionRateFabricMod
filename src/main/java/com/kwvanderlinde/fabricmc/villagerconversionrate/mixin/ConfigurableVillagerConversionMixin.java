@@ -1,6 +1,6 @@
 package com.kwvanderlinde.fabricmc.villagerconversionrate.mixin;
 
-import com.kwvanderlinde.fabricmc.villagerconversionrate.common.VillagerConversionRate;
+import com.kwvanderlinde.fabricmc.villagerconversionrate.VillagerConversionRate;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EntityType;

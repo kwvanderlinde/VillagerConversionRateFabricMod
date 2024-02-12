@@ -1,4 +1,4 @@
-package com.kwvanderlinde.fabricmc.villagerconversionrate.common;
+package com.kwvanderlinde.fabricmc.villagerconversionrate;
 
 import com.kwvanderlinde.fabricmc.villagerconversionrate.config.Configuration;
 import com.kwvanderlinde.fabricmc.villagerconversionrate.config.ConfigurationSource;
