@@ -52,7 +52,12 @@ processResources {
 	inputs.property "version", project.version
 
 	filesMatching("fabric.mod.json") {
-		expand "version": project.version
+		expand "mod_id": project.archives_base_name,
+				"mod_name": project.mod_name,
+				"mod_description": project.mod_description,
+				"version": project.version,
+				"minecraft_version_underscores": project.minecraft_version.replaceAll('\\.', '_'),
+				"minecraft_version": project.minecraft_version
 	}
 }
 
