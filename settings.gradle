@@ -1,15 +1,14 @@
 pluginManagement {
     repositories {
-        jcenter()
         maven {
             name = 'Fabric'
             url = 'https://maven.fabricmc.net/'
         }
+        mavenCentral()
         gradlePluginPortal()
     }
 }
 
 
 rootProject.name = 'villager-conversion-rate'
-include ':common', ':1.16.5'
 
