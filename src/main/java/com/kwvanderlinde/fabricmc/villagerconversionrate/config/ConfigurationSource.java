@@ -28,7 +28,7 @@ public class ConfigurationSource {
 		var result = new Configuration();
 
 		try (Reader reader = Files.newReader(configPath.toFile(), StandardCharsets.UTF_8)) {
-			result = this.parser.parse(reader);
+			result = this.parser.parse(reader).validated();
 			LOGGER.info("Configuration loaded");
 		}
 		catch (ParseFailedException e) {

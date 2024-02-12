@@ -20,12 +20,7 @@ public class ConfigurationParser {
 
 	public Configuration parse(Reader reader) throws ParseFailedException {
 		try {
-			Configuration parsed = gson.fromJson(reader, Configuration.class);
-			// Validate.
-			return new Configuration(
-					parsed.enabled(),
-					Math.max(0.0, Math.min(parsed.conversionRate(), 1.0))
-			);
+			return gson.fromJson(reader, Configuration.class);
 		}
 		catch (JsonParseException e) {
 			throw new ParseFailedException(e);
