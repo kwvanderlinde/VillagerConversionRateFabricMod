@@ -27,7 +27,7 @@ public class VillagerConversionRate {
 		return Objects.requireNonNull(instance);
 	}
 
-	public static VillagerConversionRate initialize(Path configurationDirectory) {
+	public static void initialize(Path configurationDirectory) {
 		if (instance != null) {
 			throw new RuntimeException("VillagerConversionRate has already been initialized.");
 		}
@@ -37,13 +37,6 @@ public class VillagerConversionRate {
 		);
 		instance = new VillagerConversionRate(configurationSource);
 
-		return instance;
-	}
-
-	private final ConfigurationSource configurationSource;
-
-	private VillagerConversionRate(ConfigurationSource configurationSource) {
-		this.configurationSource = configurationSource;
 
 		LOGGER.info(String.format("Initializing %s mod", MOD_NAME));
 
@@ -52,11 +45,17 @@ public class VillagerConversionRate {
 		// Proceed with mild caution.
 
 		// Ensure that the configuration is loaded.
-		this.configurationSource.load();
+		configurationSource.load();
+
+		CommandRegistrationCallback.EVENT.register(instance::registerCommands);
 
 		LOGGER.info(String.format("Finished initializing %s mod", MOD_NAME));
+	}
 
-		CommandRegistrationCallback.EVENT.register(this::registerCommands);
+	private final ConfigurationSource configurationSource;
+
+	private VillagerConversionRate(ConfigurationSource configurationSource) {
+		this.configurationSource = configurationSource;
 	}
 
 	public Configuration getConfiguration() {
