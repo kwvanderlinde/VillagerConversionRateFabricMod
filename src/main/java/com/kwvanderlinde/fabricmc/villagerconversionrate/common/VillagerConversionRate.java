@@ -6,7 +6,6 @@ import com.kwvanderlinde.fabricmc.villagerconversionrate.config.ConfigurationSou
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.awt.*;
 import java.nio.file.Path;
 import java.util.Objects;
 import java.util.Random;
@@ -37,12 +36,10 @@ public class VillagerConversionRate {
 		return instance;
 	}
 
-	private final ConfigurationSource configurationSource;
 	private final VillagerConversionPredicate villagerConversionPredicate;
 
 	private VillagerConversionRate(ConfigurationSource configurationSource,
 	                               VillagerConversionPredicate villagerConversionPredicate) {
-		this.configurationSource = configurationSource;
 		this.villagerConversionPredicate = villagerConversionPredicate;
 
 		LOGGER.info(String.format("Initializing %s mod", MOD_NAME));
@@ -52,16 +49,12 @@ public class VillagerConversionRate {
 		// Proceed with mild caution.
 
 		// Ensure that the configuration is loaded.
-		this.configurationSource.get();
+		configurationSource.get();
 
 		LOGGER.info(String.format("Finished initializing %s mod", MOD_NAME));
 
 		instance = this;
 
-	}
-
-	public ConfigurationSource getConfigurationSource() {
-		return this.configurationSource;
 	}
 
 	public VillagerConversionPredicate getConversionPredicate() {

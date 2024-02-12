@@ -1,8 +1,6 @@
 package com.kwvanderlinde.fabricmc.villagerconversionrate.config;
 
 import com.google.common.io.Files;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.io.FileNotFoundException;
 import java.io.Reader;
@@ -11,8 +9,6 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 
 public class ConfigurationLocator {
-	private static final Logger LOGGER = LogManager.getFormatterLogger(ConfigurationLocator.class.getCanonicalName());
-
 	private final Path configDirectory;
 	private final String modName;
 

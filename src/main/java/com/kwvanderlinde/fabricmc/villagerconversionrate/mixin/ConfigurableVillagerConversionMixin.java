@@ -20,10 +20,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(Zombie.class)
 public class ConfigurableVillagerConversionMixin extends Monster {
     // region Just satisfy the compiler with these constructors
+    @SuppressWarnings("unused")
     public ConfigurableVillagerConversionMixin(EntityType<? extends Zombie> entityType, Level level) {
         super(entityType, level);
     }
 
+    @SuppressWarnings("unused")
     public ConfigurableVillagerConversionMixin(Level level) {
         this(EntityType.ZOMBIE, level);
     }
