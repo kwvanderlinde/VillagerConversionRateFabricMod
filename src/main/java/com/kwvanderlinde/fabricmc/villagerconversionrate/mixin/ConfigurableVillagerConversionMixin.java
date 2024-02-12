@@ -38,38 +38,39 @@ public class ConfigurableVillagerConversionMixin extends Monster {
             return;
         }
 
-        switch (VillagerConversionRate.getInstance().getConversionPredicate().test()) {
-            case USE_VANILLA_BEHAVIOUR:
-                // Customized conversion rate disabled. Default to vanilla behaviour.
-                return;
+        final var config = VillagerConversionRate.getInstance().getConfiguration();
+        if (!config.enabled()) {
+            // Customized conversion rate disabled. Default to vanilla behaviour.
+            return;
+        }
 
-            case KILL: {
-                // Customized conversion rate is enabled, but conversion failed. Suppress vanilla behaviour and do not apply conversion logic.
-                callbackInfo.cancel();
-                return;
+        // Mod is enabled, so suppress vanilla selection logic.
+        callbackInfo.cancel();
+
+        double conversionRate = config.conversionRate();
+        if ((conversionRate == 0.0)                              // 0.0 means it is impossible for conversion to occur.
+                || this.random.nextDouble() > conversionRate) {  // N.B.: `this.random.nextDouble() <= 1.0` is always `true`.
+            // Conversion failed. Just let the villager die.
+            callbackInfo.setReturnValue(true);
+            return;
+        }
+
+        // Conversion succeeded. Can't delegate to vanilla since it will try to apply its own
+        // decision about whether to kill the villager. Instead we have to unfortunately duplicate
+        // the logic here.
+        // TODO Find a way of doing this without copying the code from Zombie#killedEntity()
+
+        ZombieVillager zombieVillager = villager.convertTo(EntityType.ZOMBIE_VILLAGER, false);
+        if (zombieVillager != null) {
+            zombieVillager.finalizeSpawn(serverLevel, serverLevel.getCurrentDifficultyAt(zombieVillager.blockPosition()), MobSpawnType.CONVERSION, new Zombie.ZombieGroupData(false, true), null);
+            zombieVillager.setVillagerData(villager.getVillagerData());
+            zombieVillager.setGossips(villager.getGossips().store(NbtOps.INSTANCE));
+            zombieVillager.setTradeOffers(villager.getOffers().createTag());
+            zombieVillager.setVillagerXp(villager.getVillagerXp());
+            if (!this.isSilent()) {
+                serverLevel.levelEvent(null, 1026, this.blockPosition(), 0);
             }
-
-            case CONVERT: {
-                // Customized conversion rate is enabled and conversion succeeded. Suppress vanilla behaviour and apply conversion logic.
-                callbackInfo.cancel();
-
-                // Perform the conversion by making a new zombie villager with the villager's data.
-                // region TODO Find a way of doing this without copying the code from net.minecraft.entity.mob.ZombieEntity#onKilledOther()
-                ZombieVillager zombieVillager = villager.convertTo(EntityType.ZOMBIE_VILLAGER, false);
-                if (zombieVillager != null) {
-                    zombieVillager.finalizeSpawn(serverLevel, serverLevel.getCurrentDifficultyAt(zombieVillager.blockPosition()), MobSpawnType.CONVERSION, new Zombie.ZombieGroupData(false, true), null);
-                    zombieVillager.setVillagerData(villager.getVillagerData());
-                    zombieVillager.setGossips(villager.getGossips().store(NbtOps.INSTANCE));
-                    zombieVillager.setTradeOffers(villager.getOffers().createTag());
-                    zombieVillager.setVillagerXp(villager.getVillagerXp());
-                    if (!this.isSilent()) {
-                        serverLevel.levelEvent(null, 1026, this.blockPosition(), 0);
-                    }
-
-                    callbackInfo.setReturnValue(false);
-                }
-                // endregion
-            }
+            callbackInfo.setReturnValue(false);
         }
     }
 }

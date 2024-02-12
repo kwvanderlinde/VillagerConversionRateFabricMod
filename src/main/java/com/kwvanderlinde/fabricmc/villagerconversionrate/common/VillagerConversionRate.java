@@ -1,5 +1,6 @@
 package com.kwvanderlinde.fabricmc.villagerconversionrate.common;
 
+import com.kwvanderlinde.fabricmc.villagerconversionrate.config.Configuration;
 import com.kwvanderlinde.fabricmc.villagerconversionrate.config.ConfigurationSource;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.BoolArgumentType;
@@ -14,7 +15,6 @@ import org.apache.logging.log4j.Logger;
 
 import java.nio.file.Path;
 import java.util.Objects;
-import java.util.Random;
 
 public class VillagerConversionRate {
 	public static final String MOD_NAME = "villager_conversion_rate";
@@ -35,19 +35,15 @@ public class VillagerConversionRate {
 		ConfigurationSource configurationSource = new ConfigurationSource(
 				configurationDirectory.resolve(MOD_NAME + ".json")
 		);
-		instance = new VillagerConversionRate(configurationSource,
-		                                      new VillagerConversionPredicate(new Random(), configurationSource));
+		instance = new VillagerConversionRate(configurationSource);
 
 		return instance;
 	}
 
 	private final ConfigurationSource configurationSource;
-	private final VillagerConversionPredicate villagerConversionPredicate;
 
-	private VillagerConversionRate(ConfigurationSource configurationSource,
-	                               VillagerConversionPredicate villagerConversionPredicate) {
+	private VillagerConversionRate(ConfigurationSource configurationSource) {
 		this.configurationSource = configurationSource;
-		this.villagerConversionPredicate = villagerConversionPredicate;
 
 		LOGGER.info(String.format("Initializing %s mod", MOD_NAME));
 
@@ -63,8 +59,8 @@ public class VillagerConversionRate {
 		CommandRegistrationCallback.EVENT.register(this::registerCommands);
 	}
 
-	public VillagerConversionPredicate getConversionPredicate() {
-		return this.villagerConversionPredicate;
+	public Configuration getConfiguration() {
+		return this.configurationSource.get();
 	}
 
 	private void registerCommands(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext registryAccess, Commands.CommandSelection environment) {
